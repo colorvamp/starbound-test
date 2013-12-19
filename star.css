@@ -1,0 +1,43 @@
+*{font-family:'Press Start 2P',cursive;font-size:7px;line-height:9px;text-shadow:0 1px 1px rgba(0,0,0,1);margin:0;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;cursor:default;}
+body{margin:0;}
+ul{list-style:none;padding:0;}
+.hidden{display:none;}
+
+.square{border:1px solid black;background:linear-gradient(to bottom,#9e9e9e,#686868);padding:2px;border-radius:4px;}
+.square > span{background:#191919;padding:1px;border-radius:2px;}
+
+.inventory{position:absolute;top:40px;left:400px;width:280px;height:300px;border:2px solid black;border-radius:5px;background:#333;color:#666;box-shadow:10px 10px 3px rgba(0,0,0,.4);}
+.inventory .header{}
+.inventory .header h1{color:white;}
+.inventory .header .wrapper{padding:4px 6px;}
+.inventory .header .menu{text-transform:uppercase;background:black;font-size:0;}
+.inventory .header .menu li{display:inline-block;font-size:7px;padding:2px 4px;}
+.inventory .body{}
+.inventory .body > .table{padding:4px;color:#888;}
+.inventory .body > .table div + div{margin-bottom:4px;}
+
+
+
+.table{}
+.table > div{font-size:0;}
+.table > div > div{display:inline-block;width:50%;font-size:7px;vertical-align:top;}
+
+
+.bar{width:100%;height:8px;border:1px solid black;border-radius:2px;background:
+linear-gradient(to left,
+transparent 10%,#555 10%,#555 calc(10% + 1px),transparent calc(10% + 1px),
+transparent 20%,#555 20%,#555 calc(20% + 1px),transparent calc(20% + 1px),
+transparent 30%,#555 30%,#555 calc(30% + 1px),transparent calc(30% + 1px),
+transparent 40%,#555 40%,#555 calc(40% + 1px),transparent calc(40% + 1px),
+transparent 50%,#555 50%,#555 calc(50% + 1px),transparent calc(50% + 1px),
+transparent 60%,#555 60%,#555 calc(60% + 1px),transparent calc(60% + 1px),
+transparent 70%,#555 70%,#555 calc(70% + 1px),transparent calc(70% + 1px),
+transparent 80%,#555 80%,#555 calc(80% + 1px),transparent calc(80% + 1px),
+transparent 90%,#555 90%,#555 calc(90% + 1px),transparent calc(90% + 1px)
+)
+,linear-gradient(to bottom,#444,#888 50%,#333);
+}
+.bar > div{height:100%;background:
+
+linear-gradient(to bottom,#9f3739,#ffa29b 50%,#c24f4a 50%,#7a1919);border-left:1px solid rgba(0,0,0,.4);border-right:1px solid rgba(0,0,0,.4);}
+
