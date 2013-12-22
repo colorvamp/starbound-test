@@ -3,17 +3,27 @@ var _starbound = {
 	init: function(event){
 		addEventListener('keydown',_starbound.onkeydown);
 		addEventListener('keyup',_starbound.onkeyup);
+var charElem = $_('char1');
+_char.init(charElem);
 _char.arm.load();
 	},
 	onkeydown: function(e){
 		//alert(e.which);
+var charElem = $_('char1');
 		switch(e.which){
-			case 32:
+			case 32:/* SPACE */
 				e.preventDefault();
 				if(_starbound.vars.keymap[e.which]){return false;}
 				_starbound.vars.keymap[e.which] = true;
-var charElem = $_('char1');
 				_char.jumpStart(charElem);
+				break;
+			case 37:/* RIGHT */
+				e.preventDefault();
+				_char.moveRight(charElem);
+				break;
+			case 39:/* LEFT */
+				e.preventDefault();
+				_char.moveLeft(charElem);
 				break;
 			case 73:
 				var elem = document.querySelector('.inventory');if(!elem){return false;}
@@ -23,12 +33,20 @@ var charElem = $_('char1');
 	},
 	onkeyup: function(e){
 		//alert(e.which);
+var charElem = $_('char1');
 		switch(e.which){
 			case 32:
 				e.preventDefault();
 				_starbound.vars.keymap[e.which] = false;
-var charElem = $_('char1');
 				_char.jumpEnd(charElem);
+				break;
+			case 37:/* RIGHT */
+				e.preventDefault();
+				_char.moveStop(charElem);
+				break;
+			case 39:/* LEFT */
+				e.preventDefault();
+				_char.moveStop(charElem);
 				break;
 		}
 	},

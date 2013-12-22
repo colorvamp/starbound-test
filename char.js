@@ -1,18 +1,25 @@
 var _char = {
-	init: function(){
-
+	init: function(charElem){
+//FIXME: hardcoded
+		charElem.positionX = 100;
+		charElem.positionY = 300;
+		charElem.velocityY = 0;
+		charElem.velocityX = 0;
+		charElem.intervals = {};
+		charElem.intervals.update = setInterval(function(){_char.update(charElem);},33);
+	},
+	moveLeft: function(charElem){
+		charElem.velocityX = +10.0;
+	},
+	moveRight: function(charElem){
+		charElem.velocityX = -10.0;
+	},
+	moveStop: function(charElem){
+		charElem.velocityX = 0;
 	},
 	jumpStart: function(charElem){
 		charElem.velocityY = -16.0;
 		charElem.onGround = false;
-charElem.positionX = 100;
-charElem.positionY = 300;
-
-		if(!charElem.intervalJump){
-charElem.intervalJump = setInterval(function(){_char.update(charElem);},33);
-//_char.update(charElem);
-//return false;
-}
 	},
 	jumpEnd: function(charElem){
 		if(charElem.velocityY < -6.0){charElem.velocityY = -6.0;}
@@ -20,7 +27,7 @@ charElem.intervalJump = setInterval(function(){_char.update(charElem);},33);
 	update: function(charElem){
 		charElem.velocityY += _starbound.vars.gravity;
 		charElem.positionY += charElem.velocityY;
-		//charElem.positionX += charElem.velocityX;
+		charElem.positionX += charElem.velocityX;
 		if(charElem.positionY >= 300.0){
 			charElem.positionY = 300.0;
 			charElem.velocityY = 0.0;
@@ -29,7 +36,9 @@ charElem.intervalJump = setInterval(function(){_char.update(charElem);},33);
 		}
     
 		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
-//$_('log').innerHTML = charElem.velocityY+' '+charElem.positionY;
+		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
+$_('log').innerHTML = charElem.velocityX+' '+charElem.positionX;
+		charElem.style.left = charElem.positionX+'px';
 		charElem.style.top = charElem.positionY+'px';
 	}
 }
