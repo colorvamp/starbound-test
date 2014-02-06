@@ -6,16 +6,20 @@
 	<script type="text/javascript" src="canvas.js"></script>
 	<script type="text/javascript" src="char.js"></script>
 	<script type="text/javascript" src="star.js"></script>
+	<script type="text/javascript" src="weather.js"></script>
 	<script type="text/javascript" src="littleDrag.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 </head>
 <body>
 <div id="log" style="position:absolute;"></div>
 	<img src="starbound-2013-07-16-12-05-38-34.png"/>
-	<div id="char1" class="char" style="position:absolute;top:300px;left:100px;">
-		<img src="chars/body.png" style="width:calc(17px * 3);"/>
-	</div>
-	<div class="inventory dragable" onmousedown="_littleDrag.onMouseDown(event);">
+	<div class="weather"></div>
+	<div id="chars" style="position:absolute;top:0;left:0;"></div>
+	<div class="belt"><div class="wrapper">
+		<div class="item square"><span></span></div>
+		<div class="item square"><span></span></div>
+	</div></div>
+	<div class="inventory hidden dragable" onmousedown="_littleDrag.onMouseDown(event);">
 		<div class="header">
 			<div class="avatar"></div>
 			<div class="wrapper">
