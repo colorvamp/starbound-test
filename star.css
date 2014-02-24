@@ -10,6 +10,8 @@ img{
     image-rendering: optimize-contrast;         /* CSS3 Proposed       */
 }
 .hidden{display:none;}
+.controller0{position:absolute;top:40px;z-index:10;}
+.controller1{position:absolute;top:80px;z-index:10;}
 
 .weather{position:absolute;width:100%;height:100%;top:0;left:0;}
 .weather > .cloud{position:absolute;}

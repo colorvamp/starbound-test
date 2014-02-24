@@ -3,6 +3,11 @@ var _starbound = {
 	init: function(event){
 		addEventListener('keydown',_starbound.onkeydown);
 		addEventListener('keyup',_starbound.onkeyup);
+window.addEventListener("gamepadconnected", function(e) {
+  var gp = navigator.getGamepads()[0];
+alert('Gamepad connected at index '+gp.index+': '+gp.id+'. '+gp.buttons.length+' buttons, '+gp.axes.length+' axes.');
+});
+
 _char.create('main',{'x':100,'y':300});
 _char.create('test',{'x':300,'y':300});
 _starbound.weather.cloud.init();
@@ -17,11 +22,11 @@ var charElem = $_('main');
 				break;
 			case 65:/* A-KEY */
 				e.preventDefault();if(_starbound.vars.keymap[e.which]){return false;}_starbound.vars.keymap[e.which] = true;
-				_char.moveRight(charElem);
+				_char.moveRight(charElem,1);
 				break;
 			case 68:/* D-KEY */
 				e.preventDefault();if(_starbound.vars.keymap[e.which]){return false;}_starbound.vars.keymap[e.which] = true;
-				_char.moveLeft(charElem);
+				_char.moveLeft(charElem,1);
 				break;
 			case 73:
 				var elem = document.querySelector('.inventory');if(!elem){return false;}

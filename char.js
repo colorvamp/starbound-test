@@ -26,21 +26,23 @@ var _char = {
 		charElem.positionY = params.y;
 		charElem.velocityY = 0;
 		charElem.velocityX = 0;
+		charElem.onGround = true;
 		charElem.intervals = {};
 		charElem.listeners = {};
 		charElem.functions = {};
 		charElem.intervals.update = setInterval(function(){_char.update(charElem);},30);
 	},
-	moveLeft: function(charElem){
-		charElem.velocityX = +10.0;
+	moveLeft: function(charElem,perc){
+		charElem.velocityX = +(10.0*perc);
 	},
-	moveRight: function(charElem){
-		charElem.velocityX = -10.0;
+	moveRight: function(charElem,perc){
+		charElem.velocityX = -(10.0*perc);
 	},
 	moveStop: function(charElem){
 		//charElem.velocityX = 0;
 	},
 	jumpStart: function(charElem){
+		if(!charElem.onGround){return false;}
 		charElem.velocityY = -16.0;
 		charElem.onGround = false;
 	},
@@ -49,17 +51,18 @@ var _char = {
 	},
 	update: function(charElem){
 		charElem.velocityY += _starbound.vars.gravity;
-if(charElem.velocityX && !_starbound.vars.keymap[65] && !_starbound.vars.keymap[68]){
-if(charElem.velocityX > 0){charElem.velocityX -= 1;}
-if(charElem.velocityX < 0){charElem.velocityX += 1;}
-}
+		if(charElem.velocityX && !_starbound.vars.keymap[65] && !_starbound.vars.keymap[68]){
+			if(charElem.velocityX > 0){charElem.velocityX -= 1;}
+			if(charElem.velocityX < 0){charElem.velocityX += 1;}
+			if(Math.abs(charElem.velocityX) < 0.9){charElem.velocityX = 0;}
+		}
+
 		charElem.positionY += charElem.velocityY;
 		charElem.positionX += charElem.velocityX;
 		if(charElem.positionY >= 300.0){
 			charElem.positionY = 300.0;
 			charElem.velocityY = 0.0;
 			charElem.onGround = true;
-			//clearInterval(charElem.intervalJump);
 		}
     
 		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
