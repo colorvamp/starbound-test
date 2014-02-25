@@ -9,6 +9,7 @@
 	<script type="text/javascript" src="weather.js"></script>
 	<script type="text/javascript" src="littleDrag.js"></script>
 	<script type="text/javascript" src="js/api.gamepad.js"></script>
+	<script type="text/javascript" src="js/options.js"></script>
 	<link href='http://fonts.googleapis.com/css?family=Press+Start+2P' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -20,6 +21,25 @@
 		<div class="item square"><span></span></div>
 		<div class="item square"><span></span></div>
 	</div></div>
+	<div class="hud">
+		<div class="options dropdown-toggle"><span>Op</span>
+			<div class="dropdown-menu">
+				<div class="wrapper">
+					<h1>Options</h1>
+					<p>"Starbound-test" options</p>
+				</div>
+				<div class="hr"><span>Players</span></div>
+				<div class="wrapper">
+					<div class="table">
+						<div><div>Número</div><div><select class="config-players-count"><option>1</option><option>2</option></select></div></div>
+					</div>
+					<div class="option-controllers">
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="inventory hidden dragable" onmousedown="_littleDrag.onMouseDown(event);">
 		<div class="header">
 			<div class="avatar"></div>

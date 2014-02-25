@@ -10,17 +10,42 @@ img{
     image-rendering: optimize-contrast;         /* CSS3 Proposed       */
 }
 .hidden{display:none;}
+/* INI-dropdown */
+.dropdown-toggle > .dropdown-menu{display:none;position:absolute;}
+.dropdown-toggle.active > .dropdown-menu{display:block;min-width:400px;}
+.dropdown-menu{border:2px solid black;border-radius:5px;background:#333;color:#666;box-shadow:10px 10px 3px rgba(0,0,0,.4);}
+.dropdown-menu.padded{}
+.dropdown-menu h1{color:white;}
+.dropdown-menu .wrapper{padding:4px 6px;}
+.dropdown-menu .hr{text-transform:uppercase;background:black;font-size:0;}
+.dropdown-menu .hr span{display:inline-block;font-size:7px;padding:2px 4px;}
+/* END-dropdown */
+/* INI-controller */
+.controller{width:100%;margin-top:10px;}
+.controller .buttons{height:14px;}
+.controller .button{}
+.controller .axes.axes6 > progress{width:16.5%;}
+/* END-controller */
+
 .controller0{position:absolute;top:40px;z-index:10;}
 .controller1{position:absolute;top:80px;z-index:10;}
+
+.hud{position:absolute;top:0;width:100%;z-index:100;}
+.hud > span{display:inline-block;text-align:right;}
+.hud .options{position:absolute;right:0;}
+
+
+
 
 .weather{position:absolute;width:100%;height:100%;top:0;left:0;}
 .weather > .cloud{position:absolute;}
 
 .square{border:1px solid black;background:linear-gradient(to bottom,#9e9e9e,#686868);padding:2px;border-radius:4px;}
 .square > span{background:#191919;padding:1px;border-radius:2px;}
+.square.pressed > span{background:#f07746;padding:1px;border-radius:2px;}
 
 .belt{position:absolute;width:100%;height:36px;top:0;}
-.belt > .wrapper{width:600px;height:100%;margin:auto;background:red;}
+.belt > .wrapper{width:600px;height:100%;margin:auto;}
 .belt .item{display:inline-block;width:36px;height:100%;}
 .belt .item > span{display:inline-block;width:100%;height:100%;}
 

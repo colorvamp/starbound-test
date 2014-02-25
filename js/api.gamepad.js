@@ -25,6 +25,7 @@ var charElem = $_('test');
 }
 
     var d = document.getElementById("controller" + j);
+if(!d){continue;}
     var buttons = d.getElementsByClassName("button");
 			for(var i=0;i<controller.buttons.length;i++){
 				var b = buttons[i];
@@ -35,9 +36,7 @@ var charElem = $_('test');
 _char.jumpStart(charElem);
 				}
 
-				var pct = Math.round(val * 100) + "%"
-				b.style.backgroundSize = pct + " " + pct;
-				if(pressed){b.className = "button pressed";}else{b.className = "button";}
+				if(pressed){b.className = "square button pressed";}else{b.className = "square button";}
 			}
 
 			var axes = d.getElementsByClassName("axis");
@@ -66,35 +65,21 @@ _char.jumpStart(charElem);
 	addGamepad: function(gamepad) {
 		_gamepad.vars.gamepads[gamepad.index] = gamepad;
 
-var d = document.createElement("div");
-  d.setAttribute("id", "controller" + gamepad.index);
-  d.setAttribute("class","controller" + gamepad.index);
-  var t = document.createElement("h1");
-  t.appendChild(document.createTextNode("gamepad: " + gamepad.id));
-  d.appendChild(t);
-  var b = document.createElement("div");
-  b.className = "buttons";
-  for (var i=0; i<gamepad.buttons.length; i++) {
-    var e = document.createElement("span");
-    e.className = "button";
-    //e.id = "b" + i;
-    e.innerHTML = i;
-    b.appendChild(e);
-  }
-  d.appendChild(b);
-  var a = document.createElement("div");
-  a.className = "axes";
-  for (var i=0; i<gamepad.axes.length; i++) {
-    var e = document.createElement("progress");
-    e.className = "axis";
-    //e.id = "a" + i;
+		if(gamepad.index+1 > _options.get.players()){return false;}
+//FIXME: lanzar evento
+		var c = document.querySelector('.option-controllers');if(!c){return false;}
+
+		var d = $C('DIV',{className:'controller','id':'controller'+gamepad.index},c);
+		var t = $C('DIV',{className:'controller-id',innerHTML:'gamepad:'+gamepad.id},d);
+		var b = $C('DIV',{className:'buttons'},d);
+		for(var i=0;i<gamepad.buttons.length;i++){var e = $C('SPAN',{innerHTML:i},$C('SPAN',{className:'square button button'+i},b));}
+
+		var b = $C('DIV',{className:'axes axes'+gamepad.axes.length},d);
+		for(var i=0;i<gamepad.axes.length;i++){
+    var e = $C('progress',{className:'axis'},b);
     e.setAttribute("max", "2");
     e.setAttribute("value", "1");
-    e.innerHTML = i;
-    a.appendChild(e);
   }
-  d.appendChild(a);
-  document.body.appendChild(d);
 
 		rAF(_gamepad.updateStatus);
 	},
@@ -105,4 +90,4 @@ alert(1);
 		//gamepadSupport.startPolling();
 	}
 };
-addEventListener('load',_gamepad.init);
+//addEventListener('load',_gamepad.init);

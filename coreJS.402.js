@@ -45,7 +45,19 @@
 			if($E.classHas(elem,className)){return elem;}
 			if(!elem.parentNode){return false;}
 			do{if($E.classHas(elem.parentNode,className)){return elem.parentNode;}elem = elem.parentNode;}while(elem.parentNode && limit--);return false;
+		},
+		class: {
+			exists: function(elem,className){var p = new RegExp('(^| )'+className+'( |$)');return (elem.className && elem.className.match(p));},
+			add: function(elem,className){if($E.classHas(elem,className)){return true;}elem.className += ' '+className;},
+			remove: function(elem,className){var c = elem.className;var p = new RegExp('(^| )'+className+'( |$)');c = c.replace(p,' ').replace(/  /g,' ');elem.className = c;}
+		},
+		parent: {
+			find: function(elem,p){/* p = {tagName:false,className:false} */if(p.tagName){p.tagName = p.tagName.toUpperCase();}if(p.className){p.className = new RegExp(p.className);}while(elem.parentNode && ((p.tagName && elem.tagName!=p.tagName) || (p.className && !elem.className.match(p.className)))){elem = elem.parentNode;}if(!elem.parentNode){return false;}return $fix(elem);}
 		}
+	}
+	/* extended $F-unctions functions */
+	var $F = {
+		find: function(l,pool){if(!pool){pool = window;}var func = pool;var funcSplit = l.split('.');var e = true;for(i = 0;i < funcSplit.length;i++){if(!func[funcSplit[i]]){e = false;break;}func = func[funcSplit[i]];}return e ? func : false;}
 	}
 
 	extend(Function.prototype,{
@@ -89,8 +101,58 @@
 	function $round(num){num = num.toString();if(num.indexOf('.') == -1){return num;}num = (parseFloat(num)*1000).toString().split('.')[0];if(parseInt(num[num.length-1])>4){if(num[0]!='-'){num = (parseInt(num)+10).toString();}else{num = (parseInt(num)-10).toString();}}num = (parseInt(num)/10).toString();num = num.split('.')[0];num = (parseInt(num)/100).toString();return num;}
 	function $toUrl(elem){var str = '';for(var a in elem){str += a+'='+encodeURIComponent(elem[a].toString())+'&';}return str.replace(/&$/,'');}
 	function $type(obj){return typeof(obj);}
-	function $isString(o){return (typeof o == 'string' || o instanceof String);}
+	var $is = {
+		empty: function(o){if(!o || ($is.string(o) && o == '') || ($is.array(o) && !o.length)){return true;}return false;},
+		array: function(o){return (Array.isArray(o) || $type(o.length) === 'number');},
+		string: function(o){return (typeof o == 'string' || o instanceof String);},
+		object: function(o){return (o.constructor.toString().indexOf('function Object()') == 0);},
+		formData: function(o){return (o.constructor.toString().indexOf('function FormData()') == 0);}
+	};
+	var $json = {
+		encode: function(obj){if(JSON.stringify){return JSON.stringify(obj);}},
+		decode: function(str){
+			if($is.empty(str)){return {errorDescription:"La cadena está vacía, revise la API o el COMANDO"};}
+			if(!$is.string(str)){return {errorDescription:'JSON_ERROR'};}
+			if(str.match("<title>404 Not Found</title>")){return {errorDescription:"La URL de la API es errónea: 404"};}
+			if(!JSON || !JSON.parse){return eval('('+str+')');}
+			try{return JSON.parse(str);}catch(err){return {errorDescription:str};}
+		}
+	};
+
 	var $dropdown = {
+		init: function(){
+			VAR_dropdownToggled = false;
+			var dropdownToggles = document.querySelectorAll('.dropdown-toggle');
+			$each(dropdownToggles,function(k,v){
+				var menu = v.getElementsByClassName('dropdown-menu');if(!menu.length){return;}menu = menu[0];
+				var cbOnBeforeOpen = v.getAttribute('data-dropdown-onBeforeOpen');
+
+				var closeButtons = menu.getElementsByClassName('close');
+				$each(closeButtons,function(k,el){el.onclick = function(e){e.stopPropagation();$dropdown.close(VAR_dropdownToggled);};});
+				menu.onmousedown = $dropdown.mousedown;
+				if(menu.onclick){menu.onclick_callback = menu.onclick;}
+				menu.onclick = function(e){e.stopPropagation();};
+				v.addEventListener('click',function(e){
+//FIXME: sacarlo a otra funcion
+					e.stopPropagation();
+					var isOpened = (menu.style.display == 'block');
+					if(isOpened){return $dropdown.close(menu);}
+					if(cbOnBeforeOpen){$execByString(cbOnBeforeOpen,[e,v]);}
+
+					if(menu.onclick_callback){menu.onclick_callback(e,v);}
+
+					$E.class.add(v,'active');
+					menu.style.display = (menu.style.display == 'block') ? 'none' : 'block';
+					VAR_dropdownToggled = (menu.style.display == 'block') ? menu : false;
+					var pos = $getOffsetPosition(menu);var rpos = ($T('BODY')[0].offsetWidth)-pos.left-pos.width;
+					/* If the infoBox is out the page, fix it to the right border */
+					if(rpos < 10){menu.style.left = menu.offsetLeft+rpos-10+'px';}
+				});
+			});
+		},
+		click: function(e){
+
+		},
 		close: function(elem){
 			if(!elem.$P){elem = $fix(elem);}
 			var btn = elem.$P({'className':'dropdown-toggle'});
@@ -200,6 +262,33 @@
 		ajax.onreadystatechange=function(){if(ajax.readyState==4){callback(ajax);return;}}
 		ajax.setRequestHeader('Content-Type','application/x-www-form-urlencoded');
 		ajax.send(params);
+	}
+	function $ajax(url,params,callbacks){
+		var method = 'GET';if(params){method = 'POST';}
+		var rnd = Math.floor(Math.random()*10000);
+		var data = false;
+		if(params){switch(true){
+			case ($is.object(params)):data = new FormData();$each(params,function(k,v){data.append(k,v);});break;
+			default:data = params;
+		}}
+
+		var xhr = new XMLHttpRequest();
+		xhr.open(method,url+'?rnd='+rnd,true);
+		xhr.onreadystatechange = function(){
+			if(callbacks.onEnd && xhr.readyState == XMLHttpRequest.DONE){return callbacks.onEnd(xhr.responseText);}
+		}
+		if(!$is.formData(data)){xhr.setRequestHeader('Content-Type','application/x-www-form-urlencoded');}
+		xhr.send(data);
+
+		if(callbacks.onUpdate){var offset = 0;var timer = setInterval(function(){
+			if(xhr.readyState == XMLHttpRequest.DONE){clearInterval(timer);}
+			var text = xhr.responseText.substr(offset);
+			if(!$is.empty(text)){var cmds = text.split("\n");$each(cmds,function(k,v){
+				if($is.empty(v)){return false;}
+				callbacks.onUpdate(v);
+			});}
+			offset = xhr.responseText.length;
+		},1000);}
 	}
 
 	var VAR_schedules = Object();
