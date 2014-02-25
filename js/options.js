@@ -19,7 +19,7 @@ else{_starbound.vars.players.count = localStorage.getItem('players.count');}
 	},
 	events: {
 		gamepadConnect: function(e){
-
+//FIXME: aqui añadimos el game pad al menú de opciones
 		}
 	}
 };

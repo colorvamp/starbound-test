@@ -64,6 +64,11 @@ var _char = {
 			charElem.velocityY = 0.0;
 			charElem.onGround = true;
 		}
+if(charElem.positionX >= 800.0){
+//FIXME: solo el personaje principal
+var l = charElem.positionX-800.0;
+document.body.scrollLeft = l;
+}
     
 		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
 		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
