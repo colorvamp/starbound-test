@@ -18,10 +18,10 @@ var _gamepad = {
 
 //FIXME: no siempre va a ser este personaje
 if(j == 0){
-var charElem = $_('main');
+var charElem = _starbound.player.get.main();
 }
 if(j == 1){
-var charElem = $_('test');
+var charElem = _starbound.player.get.second();
 }
 
     var d = document.getElementById("controller" + j);
@@ -66,10 +66,11 @@ _char.jumpStart(charElem);
 		_gamepad.vars.gamepads[gamepad.index] = gamepad;
 
 		if(gamepad.index+1 > _options.get.players()){return false;}
+		
 //FIXME: lanzar evento
 		var c = document.querySelector('.option-controllers');if(!c){return false;}
 
-		var d = $C('DIV',{className:'controller','id':'controller'+gamepad.index},c);
+		var d = $C('DIV',{className:'controller controller'+gamepad.index,'id':'controller'+gamepad.index},c);
 		var t = $C('DIV',{className:'controller-id',innerHTML:'gamepad:'+gamepad.id},d);
 		var b = $C('DIV',{className:'buttons'},d);
 		for(var i=0;i<gamepad.buttons.length;i++){var e = $C('SPAN',{innerHTML:i},$C('SPAN',{className:'square button button'+i},b));}

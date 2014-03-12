@@ -27,12 +27,11 @@ img{
 .controller .axes.axes6 > progress{width:16.5%;}
 /* END-controller */
 
-.controller0{position:absolute;top:40px;z-index:10;}
-.controller1{position:absolute;top:80px;z-index:10;}
-
+.map-fg{position:absolute;top:0;width:100%;}
+.map-fg img{position:absolute;width:24px;}
 .hud{position:absolute;top:0;width:100%;z-index:100;}
 .hud > span{display:inline-block;text-align:right;}
-.hud .options{position:absolute;right:0;}
+.hud .options{position:fixed;right:0;}
 
 
 

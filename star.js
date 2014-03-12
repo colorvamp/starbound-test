@@ -1,20 +1,50 @@
+var q = false;
+var rAF = window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.requestAnimationFrame;
 var _starbound = {
-	vars: {zoom:3,gravity:0.8,players:{},keymap:{}},
+	vars: {zoom:3,gravity:0.8,players:[],keymap:{}},
 	init: function(event){
 		_options.init();
 		addEventListener('keydown',_starbound.onkeydown);
 		addEventListener('keyup',_starbound.onkeyup);
 		$dropdown.init();
 		_gamepad.init();
+		//FIXME: por poner algo
+		q = new _quadtree(2000,2000);
 localStorage.name = 'star';
 
-_char.create('main',{'x':100,'y':300});
-_char.create('test',{'x':300,'y':300});
+		var x = 100;
+//FIXME
+		for(var i = 0;i < 1;i++){
+			var id = new Date().getTime();
+			_starbound.player.add(id,x,200);
+			x += 200;
+		}
 _starbound.weather.cloud.init();
+_starbound.paintMap();
+	},
+	paintMap: function(){
+		var h = document.querySelector('.map-fg');
+		for(var y in map){for(var x in map[y]){
+			if(!map[y][x].tile){continue;}
+			//alert(map[y][x].tile);
+			q.insert({'x':(x*24),'y':(y*24),'w':24,'h':24,'elem':
+				$C('IMG',{'.top':(y*24)+'px','.left':(x*24)+'px',src:'assets/wood/plank.1.png'},h)
+			});
+		}}
+	},
+	player: {
+		add: function(id,x,y){
+			var charElem = _char.create(id,{'x':x,'y':y});
+			_starbound.vars.players.push(charElem);
+		},
+		get: {
+			main: function(){if(_starbound.vars.players.length < 1){return false;}return _starbound.vars.players[0];},
+			second: function(){if(_starbound.vars.players.length < 2){return false;}return _starbound.vars.players[1];},
+		}
 	},
 	onkeydown: function(e){
 		//alert(e.which);
-var charElem = $_('main');
+var charElem = _starbound.player.get.main();
 		switch(e.which){
 			case 32:/* SPACE */
 				e.preventDefault();if(_starbound.vars.keymap[e.which]){return false;}_starbound.vars.keymap[e.which] = true;
@@ -46,7 +76,7 @@ _char.arm.followMouseEnable(charElem);
 	},
 	onkeyup: function(e){
 		//alert(e.which);
-var charElem = $_('main');
+var charElem = _starbound.player.get.main();
 		switch(e.which){
 			case 32:
 				e.preventDefault();_starbound.vars.keymap[e.which] = false;

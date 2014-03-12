@@ -16,21 +16,24 @@ var _char = {
 			ctx.imageSmoothingEnabled = false;
 			ctx.drawImage(img,0,0,fwidth,fheight);
 			_char.arm.load(charElem);
-			_char.init(charElem,params);
 		});
+
+		_char.init(charElem,params);
+		return charElem;
 	},
 	init: function(charElem,params){
 		if(!params.x){params.x = 100;}
 		if(!params.y){params.y = 300;}
+		extend(charElem,{w:51,h:96,bottom:0,right:0,onGround:false});
 		charElem.positionX = params.x;
 		charElem.positionY = params.y;
 		charElem.velocityY = 0;
 		charElem.velocityX = 0;
-		charElem.onGround = true;
 		charElem.intervals = {};
 		charElem.listeners = {};
 		charElem.functions = {};
-		charElem.intervals.update = setInterval(function(){_char.update(charElem);},30);
+		//charElem.intervals.update = setInterval(function(){_char.update(charElem);},30);
+		rAF(function(){_char.update(charElem);});
 	},
 	moveLeft: function(charElem,perc){
 		charElem.velocityX = +(10.0*perc);
@@ -59,22 +62,47 @@ var _char = {
 
 		charElem.positionY += charElem.velocityY;
 		charElem.positionX += charElem.velocityX;
-		if(charElem.positionY >= 300.0){
-			charElem.positionY = 300.0;
+		/* update character relative positions */
+		extend(charElem,{'top':charElem.positionY,'right':charElem.positionX+charElem.w,'bottom':charElem.positionY+charElem.h,'left':charElem.positionX});
+
+
+		/* retrieve all objects in the bounds of the hero */
+		var blocks = q.retrieve({x:charElem.positionX-1,y:charElem.positionY-1,w:charElem.w+2,h:charElem.h+2});
+		/* Vamos a hacer un casting rápido para ver el suelo de nuestro alrededor */
+		for(var a in blocks){
+//$_('log').innerHTML = charElem.left+' - '+charElem.right;
+			blocks[a].elem.style.outline = 0;
+			var b = {'left':blocks[a].x,'right':blocks[a].x+blocks[a].w};
+			
+			if(charElem.bottom >= blocks[a].y && (
+				(charElem.left+1 > b.left && charElem.left+1 < b.right) || 
+				(charElem.right-1 > b.left && charElem.right-1 < b.right)
+			)){
+				blocks[a].elem.style.outline = '1px solid red';
+				charElem.positionY = parseInt(blocks[a].y-charElem.h);
+				extend(charElem,{'top':charElem.positionY,'bottom':charElem.positionY+charElem.h});
+				charElem.velocityY = 0.0;
+				charElem.onGround = true;
+			}
+		}
+
+		/* Por seguridad */
+		if(charElem.bottom > 900){
+			charElem.positionY = 600;
 			charElem.velocityY = 0.0;
 			charElem.onGround = true;
 		}
+
 if(charElem.positionX >= 800.0){
 //FIXME: solo el personaje principal
 var l = charElem.positionX-800.0;
 document.body.scrollLeft = l;
 }
     
-		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
-		//if(charElem.positionX < 10 || charElem.positionX > 190){charElem.velocityX *= -1;}
-$_('log').innerHTML = charElem.velocityX+' '+charElem.positionX;
 		charElem.style.left = charElem.positionX+'px';
+$_('log').innerHTML = charElem.velocityY;
 		charElem.style.top = charElem.positionY+'px';
+		rAF(function(){_char.update(charElem);});
 	}
 }
 
